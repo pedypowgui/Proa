@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guilherme Cheiroso</title>
+
+        <script>
+
+            const pi = 3.1415;
+            const dois = 2;//Metade das coisa
+
+            var opc, res;
+            var base, altura, raio, diagonalMaior, diagonalMenor, baseMaior, baseMenor;
+
+            alert(`
+                Menu de seleção de cálculos geométricos, em centímetros\n
+                1 - Calcular área do retângulo;\n
+                2 - Calcular área do quadrado;\n
+                3 - Calcular área do losango;\n
+                4 - Calcular área do trapézio;\n
+                5 - Calcular área do paralelogramo;\n
+                6 - Calcular área do triângulo;\n
+                7 - Calcular área do círculo;
+            `);
+
+            opc = prompt("Digite o número da sua opção: ");
+
+            // Retângulo e paralelogramo
+            if(opc == 1 || opc == 5){
+                base = prompt("Base: ");
+                altura = prompt("Altura: ");
+
+                res = base * altura;
+
+                alert("Área do retângulo: " + res + "cm²");
+            
+            // Quadrado
+            } else if(opc == 2){
+                base = prompt("Lado: ");
+
+                res = base * base;
+
+                alert("Área do quadrado: " + res + "cm²");
+        
+            // Losango
+            } else if(opc == 3){
+                diagonalMaior = prompt("Diagonal maior: ");
+                diagonalMenor = prompt("Diagonal menor: ");
+
+                res = (diagonalMaior * diagonalMenor) / dois;
+
+                alert("Área do losango: " + res + "cm²");
+            
+            // Trapézio
+            } else if(opc == 4){
+                baseMaior = Number(prompt("Base maior: "));
+                baseMenor = Number(prompt("Base menor: "));
+                altura = prompt("Altura: ");
+                
+                res = baseMaior + baseMenor;
+                res = res * altura;
+                res = res / 2;
+                
+                alert("Área do trapézio: " + res + "cm²");
+            
+            // Triângulo
+            } else if(opc == 6){
+                base = prompt("Base: ");
+                altura = prompt("Altura: ");
+
+                res = base * altura / 2;
+
+                alert("Área do triângulo: " + res + "cm²");
+
+            // Círculo
+            } else if(opc == 7){
+                raio = prompt("Raio: ");
+
+                res = (raio * raio) * pi;
+
+                alert("Área do círculo: " + res + "cm²");
+            }
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
