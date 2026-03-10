@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gui lindão</title>
+
+        <script>
+            
+            var notas = Array(6);
+            var media = 0;
+
+            for(let i = 0; i < notas.length;){
+                notas[i] = Number(prompt(`Digite a ${i + 1}º nota: `));
+                if(notas[i] >= 1 && notas[i] <= 10){
+                    media += notas[i];
+                    i++;
+                }
+            }
+
+            media /= 6;
+            alert(`Media aritmética de todas as notas:\n${media}`);
+                
+        </script>
+
+    </head>
+    <body>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gui lindão</title>
+
+        <script>
+            
+            while(true){
+                var n1, n2, media, opc;
+
+                n1 = Number(prompt("nota 1:"));
+                n2 = Number(prompt("nota 2:"));
+                
+                media = (n1 + n2) / 2
+
+
+                if(media >= 9.5){
+                    alert(`Media: ${media}\nAPROVADO!!!`);
+                } else{
+                    alert(`Media: ${media}\nNÃO APROVADO!!`);
+                }
+                
+                opc = prompt("Calcular a média de outro aluno S/N?");
+                if(opc == "n"){
+                    break;
+                } else if(opc == "s") {
+                    continue;
+                } else {
+                    alert("Vou considerar isso um sim...");
+                }
+            }
+                
+        </script>
+
+    </head>
+    <body>
+    </body>
+</html>

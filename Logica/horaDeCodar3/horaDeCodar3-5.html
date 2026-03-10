@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gui lindão</title>
+
+        <script>
+            
+            var num1, num2, media;
+            var soma = 0, cont = 0;
+            
+            num1 = Number(prompt("Primeiro número: "));
+            num2 = Number(prompt("Segundo número: "));
+            
+            for(var i = num1; i <= num2; i++){
+                soma += i;
+                cont++;
+            }
+
+            media = soma/cont;
+
+            alert(`Média aritmética de todos os números de ${num1} até ${num2}:\n${media}`);
+
+        </script>
+
+    </head>
+    <body>
+    </body>
+</html>
