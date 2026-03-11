@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guilherme, aluno favorito do Gabs!</title>
+
+        <script>
+            
+            var peso;
+
+            var altura = Number(prompt("Digite a sua altura: "));
+            var sexo = prompt(`
+                Digite seu sexo, de acordo com:\n
+                1 - Feminino;\n
+                2 - Masculino;
+            `);
+
+            if(sexo == 1){
+                peso = (62.1 * altura) - 44.7;
+            } else if(sexo == 2){
+                peso = (72.7 * altura) - 58;
+            }
+
+            alert("Seu peso ideal é: " + peso + "kg");
+
+        </script>
+    </head>
+    <body>  
+    </body>
+</html>

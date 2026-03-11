@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guilherme muito legal</title>
+
+        <script>
+
+            var nums = Array(6);
+            var soma = 0;
+            
+            for(let i = 0; i < 6; i++){
+                nums[i] = Number(prompt(`Digite o ${i + 1}º número: `));
+            }
+
+            nums.forEach(num => {
+                if(num < 72){
+                    soma += num;
+                }
+            });
+
+            alert(`
+                Soma final: ${soma};
+                Valores digitados: ${nums};
+            `);
+
+        </script>
+    </head>
+    <body>  
+    </body>
+</html>

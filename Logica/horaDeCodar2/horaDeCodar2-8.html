@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guilherme muito bacana e supimpa</title>
+
+        <script>
+
+            var nums = Array(4);
+            var media = 0;
+            
+            for(let i = 0; i < nums.length; i++){
+                nums[i] = Number(prompt(`Digite o ${i + 1}º número: `));
+            }
+
+            nums.forEach(num => {
+                if(num > 0 && num < 10){
+                    media += num;
+                }
+            });
+
+            media /= nums.length;
+
+            if(media >= 5){
+                alert(`Media: ${media}\nVocê passou no teste!`);
+            } else {
+                alert("Tente novamente");
+            }
+
+        </script>
+    </head>
+    <body>  
+    </body>
+</html>

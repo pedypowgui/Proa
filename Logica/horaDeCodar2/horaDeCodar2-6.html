@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Guilherme esbelto</title>
+
+        <script>
+
+            var n1, n2, n3, n4;
+
+            n1 = prompt("Digite o primeiro valor: ");
+            n2 = prompt("Digite o segundo valor: ");
+            n3 = prompt("Digite o terceiro valor: ");
+            n4 = prompt("Digite o quarto valor: ");
+
+            alert(`
+                Primeiro número: ${n1};\n
+                Último número: ${n4};\n
+                Maior número: ${maiorNumero()};\n
+            `);
+
+            function maiorNumero(){
+                if(n1 > n2 && n1 > n3 && n1 > n4){
+                    return n1;
+                } else if(n2 > n1 && n2 > n3 && n2 > n4){
+                    return n2;
+                } else if(n3 > n1 && n3 > n2 && n3 > n4){
+                    return n3;
+                } else if(n4 > n1 && n4 > n2 && n4 > n3){
+                    return n4;
+                }
+            }
+
+        </script>
+    </head>
+    <body>  
+    </body>
+</html>
