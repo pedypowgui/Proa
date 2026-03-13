@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <script>
+
+            var estudantes = Array();
+            var cont = 0;
+
+            while(true){
+                aluno = prompt("Digite o nome do aluno(\"PARE\" caso queira parar):");
+                if(aluno === "PARE"){
+                    break
+                } else {
+                    estudantes.push(aluno);
+                }
+                cont++;
+            }
+
+            alert(`
+                Quantidade de estudantes: ${cont}
+                Nome dos estudantes: ${estudantes}
+            `);
+
+        </script>
+
+    </head>
+    <body>
+        
+    </body>
+</html>
