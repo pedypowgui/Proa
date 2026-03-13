@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gui Brito é bonitão!!</title>
+
+        <script>
+
+            var frutas = Array("Banana", "Maçã", "Uva", "Ameixa", "Abacaxi");
+            var frutaUser;
+
+            while(frutas.length > 0) {
+                frutaUser = prompt("Digite o nome de uma fruta: ");
+
+                for(var i = 0; i < frutaUser.length; i++){
+                    if(frutas[i] == frutaUser){
+                        frutas.splice(i, 1);
+                        alert(`${frutaUser} foi removida da lista.`);
+                        break;
+                    } else if (i == (frutaUser.length - 1)){
+                        alert(`${frutaUser} indisponível no nosso mercado.`);
+                    }
+                }
+            }
+
+            alert("Lista de compra finalizada!");
+
+        </script>
+
+    </head>
+    <body>    
+    </body>
+</html>
