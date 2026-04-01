@@ -1,0 +1,741 @@
+<html>
+<head>
+	<script>
+		const senha = 2678;
+		
+		var relatoriosOperacionais = {
+			reservasConfirmadas: 0,
+			ocupacaoAtual: 0,
+			totalHospedesCadastrados: 0,
+			totalEventosConfirmados: 0,
+			receitaAcumulada: {
+				hospedagem: 0,
+				eventos: 0,
+				total: 0
+			}
+		};	
+
+		var reservas = [];
+		var cadastros = [];
+		var quartos = [
+			{disponivel: true, num: 1},
+			{disponivel: true, num: 2},
+			{disponivel: true, num: 3},
+			{disponivel: true, num: 4},
+			{disponivel: true, num: 5},
+			{disponivel: true, num: 6},
+			{disponivel: true, num: 7},
+			{disponivel: true, num: 8},
+			{disponivel: true, num: 9},
+			{disponivel: true, num: 10},
+			{disponivel: true, num: 11},
+			{disponivel: true, num: 12},
+			{disponivel: true, num: 13},
+			{disponivel: true, num: 14},
+			{disponivel: true, num: 15},
+			{disponivel: true, num: 16},
+			{disponivel: true, num: 17},
+			{disponivel: true, num: 18},
+			{disponivel: true, num: 19},
+			{disponivel: true, num: 20},
+		];
+
+		alert("Bem vindo ao G Master Brito Hotel");
+
+		var senhaUser;
+		var nome = prompt("Por favor insira seu nome: ");
+		
+		for(var i = 0; i < 3; i++){
+			senhaUser = prompt("Digite a senha para validar sua identidade: ");
+			if(senhaUser != senha && i == 2){
+				alert("Senha incorreta 3 vezes seguidas, bloqueando todos os acessos.");
+				window.close();
+			} else if (senhaUser != senha){
+				alert("Senha incorreta, tente novamente...");
+			} else {
+				break;
+			}
+		}
+		
+		alert(`Bem vindo ao G Master Brito Hotel ${nome}, é um imenso prazer ter você por aqui!`);
+
+		function inicio() {
+
+			var escolha = parseInt(prompt(`
+				Selecione uma opção\n
+				1.) Reserva de Quartos\n
+				2.) Cadastro de Hóspedes\n
+				3.) Eventos\n
+				4.) Ar-Condicionado\n
+				5.) Abastecimento\n
+				6.) Relatórios Operacionais\n
+				7.) Sair`)
+			);
+
+			switch(escolha){
+				case 1:
+					reserva_quartos();
+					break;
+				case 2:
+					cadastro_hospedes();
+					break;
+				case 3:
+					reservarEvento();
+					break;
+				case 4:
+					arCondicionado();
+					break;
+				case 5:
+					abastecer_carros();
+					break;
+				case 6: 
+					relatorioOperacional();
+					break;
+				case 7:
+					sair();
+					break;
+				default:
+					erro(inicio);
+			}
+		}				
+
+		function reserva_quartos() {
+			var reserva = {
+				diasHospedagem: 0,
+				nomeHospede: "",
+				numQuarto: 0,
+				tipoQuarto: "",
+				total: 0
+			};
+
+			var valorDiaria, fatorTipoQuarto, confirmaReserva, subtotal, taxaServico;
+
+			alert('G Master Brito Hotel - RESERVA DE QUARTOS');
+			
+			// Entrada e validação dos dados do usuário
+			valorDiaria = verificarValorDiaria();
+			reserva.diasHospedagem = verificarDiasHospedagem();
+			reserva.nomeHospede = prompt("Nome hóspede: ");
+			reserva.tipoQuarto = verificarTipoQuarto();
+			reserva.numQuarto = verificarNumQuarto();
+
+			if(reserva.tipoQuarto == "Standard"){
+				fatorTipoQuarto = 1.0;
+			} else if (reserva.tipoQuarto == "Executivo"){
+				fatorTipoQuarto = 1.35;
+			} else {
+				fatorTipoQuarto = 1.65;
+			}
+
+			// Cálculos de custos da hospedagem
+			subtotal = valorDiaria * reserva.diasHospedagem * fatorTipoQuarto;
+			taxaServico = 0.10 * subtotal;
+			reserva.total = subtotal + taxaServico;
+
+			// Realizar reserva do quarto
+			confirmaReserva = confirm(`
+				=== Resumo ===\n
+				Hóspede: ${reserva.nomeHospede}\n
+				Quarto: ${reserva.numQuarto} (${reserva.tipoQuarto})\n
+				Subtotal: R$${subtotal}\n
+				Taxa de Serviço (10%): R$${taxaServico}\n
+				Total: R$${reserva.total}\n\n
+				${nome}, Confirmar reserva?`
+			);
+
+			if(confirmaReserva){
+				reservas.push(reserva);
+				quartos[reserva.numQuarto - 1].disponivel = false;
+
+				adicionarReceitaTotalHospedagemRelatorios(reserva.total);
+
+				alert(`Quarto ${reserva.numQuarto} reservado com sucesso!`);
+			} else {
+				alert("Operação cancelada.");
+			}
+
+			inicio();
+		}
+
+		function cadastro_hospedes() {
+			var escolha;
+
+			alert('G Master Brito Hotel - GERENCIAMENTO DE HÓSPEDES');
+
+			escolha = parseInt(prompt(`
+				Selecione uma opção\n
+				1.) Cadastrar\n
+				2.) Pesquisar por nome exato\n
+				3.) Pesquisar por prefixo\n
+				4.) Listar ordenado(A-Z)\n
+				5.) Atualizar cadastro\n
+				6.) Remover cadastro\n
+				7.) Voltar
+				`)
+			);
+
+			switch(escolha){
+				case 1:
+					cadastrarHospede();
+					break;
+				case 2:
+					alert(pesquisarNomeCompleto());
+					break;
+				case 3:
+					alert(pesquisarNomePrefixo());
+					break;
+				case 4:
+					alert(listarCadastrosOrdenados());
+					break;
+				case 5:
+					cadastrarHospede(true);
+					break;
+				case 6: 
+					alert(removerCadastro());
+					break;
+				case 7:
+					inicio();
+					break;
+				default:
+					erro(cadastro_hospedes);
+			}
+
+			inicio();
+		}
+
+		function reservarEvento(){
+			var aluguel, garcons, buffet, totalEvento, confirmaReserva;
+			
+			var quantidadeConvidados = Number(prompt("Quantidade de convidados: "));
+			var auditorio = selecionarAuditorio(quantidadeConvidados);
+
+			if(auditorio.nome == "Laranja"){
+				alert(`Auditório selecionado: ${auditorio.nome} (${auditorio.assentosExtras} assentos extras)`);
+			} else {
+				alert(`Auditório selecionado: ${auditorio.nome}.`);
+			}
+
+			aluguel = verificarDisponibilidadeSemana();
+			alert("Auditório reservado com sucesso!");
+
+			garcons = contratarGarcons(aluguel, quantidadeConvidados);
+			alert(`Garçons necessários: ${garcons.quantidade}\nCusto com garçons: R$${garcons.valorTotal.toFixed(2)}`);
+
+			buffet = calcularBuffet(quantidadeConvidados);
+			alert(`Buffet:\nCafé: ${buffet.quantidadeCafe.toFixed(2)} L\nÁgua: ${buffet.quantidadeAgua.toFixed(2)} L\nSalgados: ${buffet.quantidadeSalgados} un\nCusto Buffet: R$${buffet.valorTotal.toFixed(2)}`);
+		
+			totalEvento = garcons.valorTotal + buffet.valorTotal;
+
+			alert(`Total do evento: R$${totalEvento.toFixed(2)}`);
+
+			confirmaReserva = confirm("Confirmar reserva?");
+			if(confirmaReserva){
+				adicionarTotalEventosConfirmadosRelatorio();
+				adicioanrReceitaTotalEventosRelatorios(totalEvento);
+
+				alert("Reserva efetuada com sucesso!");
+			} else {
+				alert("Reserva cancelada com sucesso.");
+			}
+		}
+		
+		function arCondicionado() {
+			var manutencoes = [];
+			var menorValor, cadastrarEmpresa = false;
+
+			alert("G Master Brito Hotel - MANUTENÇÃO AR-CONDICIONADO");
+			
+			while(true){
+				manutencoes.push(receberInformacoesManutencaoArCondicionado());
+				cadastrarEmpresa = confirm("Cadastrar mais uma empresa?");
+				if(!cadastrarEmpresa){
+					break;
+				}	
+			}
+
+			menorValorArCondicionado(manutencoes);
+			inicio();
+		}
+
+		function abastecer_carros() {
+			var postoWayne, postoStark;
+			
+			alert('G Master Brito Hotel - ABASTECER');
+
+			postoWayne = receberInformacoesPostos("Wayne Oil");
+			postoStark = receberInformacoesPostos("Stark Petrol");
+
+			calcularPrecoAbastecimento(postoWayne);
+			calcularPrecoAbastecimento(postoStark);
+
+			if(postoWayne.total > postoStark.total){
+				imprimirMelhorPosto(postoStark, postoWayne);
+			} else {
+				imprimirMelhorPosto(postoWayne, postoStark);
+			}
+
+			inicio();
+		}
+
+		function relatorioOperacional() {
+			relatoriosOperacionais.reservasConfirmadas = 0;
+			relatoriosOperacionais.ocupacaoAtual = 0;
+
+			// Contar quantos quartos estão disponíveis e quantos estão ocupados
+			for(var i = 0; i < quartos.length; i++){
+				if(quartos[i].disponivel){
+					relatoriosOperacionais.ocupacaoAtual++;
+				} else {
+					relatoriosOperacionais.reservasConfirmadas++;
+				}
+			}
+
+			relatoriosOperacionais.totalHospedesCadastrados = cadastros.length;
+			// Soma do total de receita do dia
+			relatoriosOperacionais.receitaAcumulada.total = relatoriosOperacionais.receitaAcumulada.hospedagem + relatoriosOperacionais.receitaAcumulada.eventos;
+
+			alert('G Master Brito Hotel - RELATÓRIO OPERACIONAL DO DIA');
+
+			alert(`
+				Total de reservas confirmadas: ${relatoriosOperacionais.reservasConfirmadas}\n
+				Taxa de ocupação atual: ${relatoriosOperacionais.ocupacaoAtual} / 20\n
+				Quantidade de hóspedes cadastrados: ${relatoriosOperacionais.totalHospedesCadastrados}\n
+				Quantidade de eventos confirmados: ${relatoriosOperacionais.totalEventosConfirmados}\n
+				Receita total acumulada: R$${(relatoriosOperacionais.receitaAcumulada.total).toFixed(2)}
+			`);
+			
+			inicio();
+		}
+
+		// ÚTEIS - RESERVA DE QUARTOS
+		function verificarValorDiaria(){
+			var valorDiaria = Number(prompt("Valor da diária: "));
+				
+			if(isNaN(valorDiaria) || valorDiaria < 0){
+				alert("Valor inválido, tente novamente...");
+				return verificarValorDiaria();
+			} else {
+				return valorDiaria;
+			}
+		}
+
+		function verificarDiasHospedagem(){
+			var diasHospedagem = Number(prompt("Quantidade de diárias(máximo de 30 dias): "));
+
+			if(isNaN(diasHospedagem) || diasHospedagem <= 0 || diasHospedagem > 30){
+				alert("valor inválido, tente novamente...");
+				return verificarDiasHospedagem();
+			} else {
+				return diasHospedagem;
+			}
+		}
+
+		function verificarTipoQuarto(){
+			var tipoQuarto = prompt(`Selecione o tipo de quarto(S/E/L): `).toUpperCase();
+
+			if(tipoQuarto == "S"){
+				return "Standard";
+			} else if (tipoQuarto == "E") {
+				return "Executivo";					
+			} else if (tipoQuarto == "L") {
+				return "Luxo";
+			} else {
+				alert("Tipo de quarto inválido, tente novamente");
+				return verificarTipoQuarto();
+			}
+		}
+
+		function verificarNumQuarto(){
+			var numQuarto = Number(prompt(`${listarQuartosDisponiveis()}\nEscolha o número do quarto: `));
+
+			if(isNaN(numQuarto) || numQuarto > 20 || numQuarto < 1){
+				alert("Valor inválido, só são aceitos números inteiros de 1 a 20.");
+				return verificarNumQuarto();
+			} else {
+				if(quartos[numQuarto - 1].disponivel){
+					alert(`Quarto ${numQuarto} disponível.`);
+					return numQuarto;
+				} else {
+					alert("Quarto indisponível, selecione outro.");
+					return verificarNumQuarto();
+				}
+			}
+		}
+		
+		function listarQuartosDisponiveis(){	
+			var listaQuartosDisponiveis = "Quartos disponíveis:\n";
+
+			for(var i = 0; i < quartos.length; ){
+				for(var j = 0; j < 4; j++){
+					if(quartos[i].disponivel){
+						listaQuartosDisponiveis += `• Quarto ${quartos[i].num} [L]   `;
+					} else {
+						listaQuartosDisponiveis += `• Quarto ${quartos[i].num} [O]   `;
+					}
+
+					i++;
+				}
+				listaQuartosDisponiveis += "\n";
+			}
+
+			return listaQuartosDisponiveis;
+		}
+
+		// ÚTEIS - CADASTRO HOSPEDE
+		function cadastrarHospede(atualizarCadastro = false) {
+			var hospede = {
+				nome: "",
+				dataCadastro: null
+			};
+
+			// Atualizar cadastro
+			if(atualizarCadastro){
+				var nomeAntigoHospede = prompt("nome do hóspede que será atualizado: ").toUpperCase();
+				
+				for(var i = 0; i < cadastros.length; i++){
+					if(nomeAntigoHospede == cadastros[i].nome){
+						hospede.nome = prompt(`Digite o novo nome do cadastro de ${nomeAntigoHospede}: `).toUpperCase();
+						
+						hospede.dataCadastro = cadastros[i].dataCadastro;
+						cadastros.splice(i, 1);
+
+						break;
+					}
+				}
+
+			} else {
+				hospede.nome = prompt("Nome do hóspede: ").toUpperCase();
+			}
+			
+			
+			if(hospede.nome == "" || !isNaN(hospede.nome)){
+				alert("Nome inválido, tente novamente");
+				return cadastrarHospede(atualizarCadastro);
+			} else if (verificarCadastroExistente(hospede)){
+				alert("Hóspede já cadastrado, tente novamente");
+				return cadastrarHospede(atualizarCadastro);
+			} else if (cadastros.length == 15){
+				alert("Máximo de hóspedes atingidos.");
+				return inicio();
+			} else {
+				if(!atualizarCadastro){	
+					// Pegando a hora e data do sistema
+					hospede.dataCadastro = new Date();
+					// Formatando a data e hora que foi registrada
+					hospede.dataCadastro = hospede.dataCadastro.toLocaleString("pt-BR");
+				}
+
+				cadastros.push(hospede);
+				// Organizar os nomes em ordem alfabética 
+				cadastros.sort((a, b) => a.nome.localeCompare(b.nome));
+
+				if(atualizarCadastro){
+					alert("Atualização realizada com sucesso!");
+				} else {
+					alert("Cadastro realizado com sucesso!");
+				}
+				
+				return inicio();
+			}
+		}
+
+		function verificarCadastroExistente(hospede){
+			for(var i = 0; i < cadastros.length; i++){
+				if(cadastros[i].nome == hospede.nome){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function pesquisarNomeCompleto(){
+			var pesquisa = prompt("Digite o nome que procura: ").toUpperCase();
+			var resultado = `G Master Brito Hotel - Resultado de Pesquisa para \"${pesquisa}\"\n`;
+
+			// Procura o nome completo dentro da lista "cadastros"
+			for(var i = 0; i < cadastros.length; i++){
+				if(pesquisa == cadastros[i].nome){
+					resultado += `[${i + 1}] - ${cadastros[i].nome}`;
+					return resultado;
+				}
+			}
+			
+			return "Nenhum resultado encontrado";
+		}
+
+		function pesquisarNomePrefixo(){
+			var achouAlgumNome = false;
+
+			var pesquisa = prompt("Digite o prefixo que procura: ").toUpperCase();
+			var resultado = `G Master Brito Hotel - Resultado de Pesquisa para \"${pesquisa}\"\n`;
+
+			// Procura as duas primeiras letrar do nome completo da lista "cadastros"
+			for(var i = 0; i < cadastros.length; i++){
+				if(cadastros[i].nome.startsWith(pesquisa)){
+					resultado += `[${i + 1}] - ${cadastros[i].nome}\n`;
+					achouAlgumNome = true;
+				}
+			}
+			
+			if(achouAlgumNome){
+				return resultado;
+			} else {
+				return "Nenhum resultado encontrado";
+			}
+		}
+
+		function listarCadastrosOrdenados(){
+			var listaCadastros = "G Master Brito Hotel - BANCO DE CADASTROS\n";
+
+			for(var i = 0; i < cadastros.length; i++){
+				listaCadastros += `Nome cadastrado: ${cadastros[i].nome}\nData de cadastro: ${cadastros[i].dataCadastro}\n\n`;
+			}
+
+			return listaCadastros;
+		}
+
+		function removerCadastro(){
+			var hospede = prompt("Digite o nome do hóspede que deseja remover: ").toUpperCase();
+			
+			for(var i = 0; i < cadastros.length; i++){
+				if(hospede == cadastros[i].nome){
+					cadastros.splice(i, 1);
+					return "Hóspede removido com sucesso";
+				}
+			}
+
+			return `Nenhum resultado encontrado para \"${hospede}\"`;
+		}
+
+		// ÚTEIS - RESERVAR EVENTO
+		function selecionarAuditorio(quantidadeConvidados){
+			var local = {
+				nome: "",
+				assentos: 0,
+				assentosExtras: 0
+			};
+
+			if(quantidadeConvidados > 350){
+				alert(`Nenhum de nossos auditórios ofere suporte para ${quantidadeConvidados} convidados.`);
+				return inicio();
+			} else if (quantidadeConvidados < 0 || isNaN(quantidadeConvidados)){
+				alert("Valor inválido, tente novamente.");
+				return reservarEvento();
+			} else if(quantidadeConvidados <= 220){
+				local.nome = "Laranja";
+				if(quantidadeConvidados <= 170){
+					local.assentos = quantidadeConvidados;
+				} else {
+					local.assentos = 170;
+					local.assentosExtras = quantidadeConvidados - 170;
+				}
+			} else {
+				local.nome = "Colorado";
+				local.assentos = quantidadeConvidados;
+			}
+
+			return local;
+		}
+
+		function verificarDisponibilidadeSemana(){
+			var aluguel = {
+				diaSemana: "",
+				empresa: "",
+				horaInicial: 0,
+				duracaoEvento: 0,
+				horaFinal: 0
+			};
+
+			aluguel.diaSemana = prompt("Dia da semana que será alugado: ");
+			aluguel.horaInicial = Number(prompt("Horário de início do evento: "));
+			aluguel.duracaoEvento = Number(prompt("Duração, em horas, do evento: "));
+			aluguel.horaFinal = aluguel.horaInicial + aluguel.duracaoEvento;
+			
+			if(!(Number.isInteger(aluguel.horaInicial)) || aluguel.duracaoEvento < 1 || aluguel.duracaoEvento > 12){
+				alert("Horário selecionado inválido para reserva.");
+				return reservarEvento();
+			}
+			
+			aluguel.empresa = prompt("Nome da empresa: ");
+
+			if(aluguel.diaSemana == "sabado" || aluguel.diaSemana == "domingo"){
+				if(aluguel.horaFinal > 15 || aluguel.horaInicial < 7){
+					alert("Horário indisponível.");
+					return reservarEvento();
+				} else {
+					return aluguel;
+				}
+			} else if (aluguel.diaSemana == "segunda" || aluguel.diaSemana == "terca" || aluguel.diaSemana == "quarta" || aluguel.diaSemana == "quinta" || aluguel.diaSemana == "sexta"){
+				if(aluguel.horaFinal > 23 || aluguel.horaInicial < 7){
+					alert("Horário indisponível");
+					return reservarEvento();
+				} else {
+					return aluguel;
+				}
+			} else {
+				alert("Valor inválido, digite um dia entre segunda e domingo");
+				return reservarEvento();
+			}
+		}
+
+		function contratarGarcons(aluguel, quantidadeConvidados){
+			var garcons = {
+				quantidade: 0,
+				valorTotal: 0
+			};
+
+			garcons.quantidade += Math.ceil(quantidadeConvidados / 12);
+			garcons.quantidade += Math.floor(aluguel.duracaoEvento / 2);
+			garcons.valorTotal += garcons.quantidade * aluguel.duracaoEvento * 10.50;
+			
+			return garcons;
+		}
+
+		function calcularBuffet(quantidadeConvidados){
+			var valorCafe, valorAgua, valorSalgados;
+			
+			var buffet = {
+				quantidadeCafe: 0,
+				quantidadeAgua: 0,
+				quantidadeSalgados: 0,
+				valorTotal: 0
+			};
+			
+			buffet.quantidadeCafe = 0.2 * quantidadeConvidados;
+			buffet.quantidadeAgua = 0.5 * quantidadeConvidados;
+			buffet.quantidadeSalgados = 7 * quantidadeConvidados;
+			
+			valorCafe = buffet.quantidadeCafe * 0.80;//30,72
+			valorAgua = buffet.quantidadeAgua * 0.40;//38,4
+			valorSalgados = Math.ceil(buffet.quantidadeSalgados / 100) * 34;//476
+			
+			buffet.valorTotal = valorAgua + valorCafe + valorSalgados;
+
+			return buffet;
+		}
+
+		// ÚTEIS - MANUTENÇÃO AR-CONDICIONADO
+		function aplicarDescontoArCondicionado(manutencao){
+			var bruto = manutencao.valorAparelho * manutencao.quantidade;
+
+			if(manutencao.quantidade >= manutencao.quantidadeDesconto){
+				manutencao.total = bruto - (bruto * manutencao.desconto / 100) + manutencao.deslocamento;
+			} else {
+				manutencao.total = bruto + manutencao.deslocamento;
+			}
+		}
+
+		function receberInformacoesManutencaoArCondicionado(){
+			var manutencao = {
+				empresa: "",
+				valorAparelho: 0,
+				quantidade: 0,
+				desconto: 0,
+				quantidadeDesconto: 0,
+				deslocamento: 0,
+				total: 0
+			};
+			
+			manutencao.empresa = prompt("Empresa: ");
+			manutencao.valorAparelho = Number(prompt("Valor por aparelho: "));
+			manutencao.quantidade = Number(prompt("Quantidade: "));
+			manutencao.desconto = Number(prompt("Desconto(%): "));
+			manutencao.quantidadeDesconto = Number(prompt("Mínimo para desconto: "));
+			manutencao.deslocamento = Number(prompt("Deslocamento: "));
+
+			aplicarDescontoArCondicionado(manutencao);
+			
+			alert(`O serviço de ${manutencao.empresa} custará R$${(manutencao.total).toFixed(2)}`);
+
+			return manutencao;
+		}
+
+		function menorValorArCondicionado(manutencoes){
+			var menorValor = {
+				valor: manutencoes[0].total, //Para não ter erro de comparar o valor com zero
+				empresa: manutencoes[0].empresa
+			};
+	
+			for(var i = 0; i < manutencoes.length; i++){
+				if(manutencoes[i].total < menorValor.valor){
+					menorValor.valor = manutencoes[i].total;
+					menorValor.empresa = manutencoes[i].empresa;
+				}
+			}
+
+			alert(`O orçamento de menor valor é o de ${menorValor.empresa} por R$${(menorValor.valor).toFixed(2)}`);
+		}
+		
+		// ÚTEIS - ABASTECER CARRO
+		function receberInformacoesPostos(nomePosto){
+			var posto = {
+				nome: nomePosto,
+				etanol: 0,
+				gasolina: 0
+			};
+
+			posto.etanol = Number(prompt(`${nomePosto} -> Álcool: `));
+			posto.gasolina = Number(prompt(`${nomePosto} -> Gasolina: `));
+
+			return posto;
+		}
+
+		function calcularPrecoAbastecimento(posto){
+			if(posto.etanol <= 0.70 * posto.gasolina){
+				posto.total = posto.etanol * 42;
+				posto.melhorOpcao = "Etanol";
+			} else {
+				posto.total = posto.gasolina * 42;
+				posto.melhorOpcao = "Gasolina";
+			}
+		}
+
+		function imprimirMelhorPosto(melhorPosto, piorPosto){
+			alert(`
+				${melhorPosto.nome}: Melhor opção = ${melhorPosto.melhorOpcao} | Total (42L) = R$${(melhorPosto.total).toFixed(2)} 
+				${piorPosto.nome}: Melhor opção = ${piorPosto.melhorOpcao} | Total (42L) = R$${(piorPosto.total).toFixed(2)} 
+
+				${nome}, é mais barato abastecer com ${melhorPosto.melhorOpcao} no posto ${melhorPosto.nome}.
+			`);
+		}
+		
+		// ÚTEIS - RELATÓRIOS OPERACIONAIS
+		function adicionarTotalEventosConfirmadosRelatorio(){
+			relatoriosOperacionais.totalEventosConfirmados++;
+		}
+
+		function adicionarReceitaTotalHospedagemRelatorios(valorReservaCompleta){
+			relatoriosOperacionais.receitaAcumulada.hospedagem += valorReservaCompleta;
+		}
+
+		function adicioanrReceitaTotalEventosRelatorios(valorTotalEvento){
+			relatoriosOperacionais.receitaAcumulada.eventos += valorTotalEvento;
+		}
+
+		// ÚTEIS - INÍCIO
+		function erro(funcao) {
+			alert('Por favor, informe um número de 1 a 7');
+			funcao();
+		}
+
+		function sair() {
+			var confirma = confirm('Você deseja sair?');
+
+			alert(`Muito obrigado, e até logo, ${nome}.`);
+
+			if (confirma) {
+				window.close();
+			} else {
+				inicio();
+			}
+		}
+
+		inicio();
+	</script>
+</head>
+
+<body>
+
+</body>
+
+</html>
